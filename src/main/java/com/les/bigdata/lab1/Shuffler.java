@@ -14,7 +14,7 @@ public class Shuffler<K extends Comparable, V> {
                 .collect(
                         Collectors.toMap(
                                 Pair::getKey,
-                                Arrays::asList,
+                                Collections::singletonList,
                                 this::merge,
                                 TreeMap::new
                         )
@@ -22,7 +22,7 @@ public class Shuffler<K extends Comparable, V> {
     }
 
     public List<Pair<K, V>>  merge(List<Pair<K, V>> list1, List<Pair<K, V>> list2) {
-        List<Pair<K, V>> list = new ArrayList<>(list1);
+        List<Pair<K, V>> list = new LinkedList<>(list1);
         list.addAll(list2);
         return list;
     }

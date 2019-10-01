@@ -2,6 +2,7 @@ package com.les.bigdata.lab1;
 
 import com.les.bigdata.model.Pair;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
@@ -15,6 +16,6 @@ public class Reducer<K, V> {
         return shuffled.entrySet()
                 .stream()
                 .map(entry -> reduceFunction.apply(entry.getKey(), entry.getValue()))
-                .collect(Collectors.toList());
+                .collect(Collectors.toCollection(LinkedList::new));
     }
 }

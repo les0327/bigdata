@@ -5,6 +5,7 @@ import com.les.bigdata.model.Pair;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -20,6 +21,6 @@ public class Mapper {
 
         return Stream.of(words)
                 .map(word -> new Pair<>(word, 1))
-                .collect(Collectors.toList());
+                .collect(Collectors.toCollection(LinkedList::new));
     }
 }
