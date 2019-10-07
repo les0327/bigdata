@@ -14,10 +14,9 @@ public class Mapper {
 
     private final String SPLIT_PATTERN = "[ \n\t]";
 
-    public List<Pair<String, Integer>> map (Path path) throws IOException {
-        String all = new String(Files.readAllBytes(path));
+    public List<Pair<String, Integer>> map (String string) throws IOException {
 
-        String[] words = all.split(SPLIT_PATTERN);
+        String[] words = string.split(SPLIT_PATTERN);
 
         return Stream.of(words)
                 .map(word -> new Pair<>(word, 1))

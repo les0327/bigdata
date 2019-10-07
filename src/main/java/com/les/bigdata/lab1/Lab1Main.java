@@ -2,10 +2,14 @@ package com.les.bigdata.lab1;
 
 import com.les.bigdata.model.Pair;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Lab1Main {
 
@@ -14,11 +18,8 @@ public class Lab1Main {
         Shuffler<String, Integer> shuffler = new Shuffler<>();
         Reducer<String, Integer> reducer = new Reducer<>();
 
-        URI uri1 = ClassLoader.getSystemResource("lab1/file1").toURI();
-        URI uri2 = ClassLoader.getSystemResource("lab1/file2").toURI();
-
-        List<Pair<String, Integer>> mappedFile1 = mapper.map(Paths.get(uri1));
-        List<Pair<String, Integer>> mappedFile2 = mapper.map(Paths.get(uri2));
+        List<Pair<String, Integer>> mappedFile1 = mapper.map(readFile("lab1/file1"));
+        List<Pair<String, Integer>> mappedFile2 = mapper.map(readFile("lab1/file2"));
 
         System.out.println("Mapped values from file1:");
         mappedFile1.forEach(System.out::println);
@@ -37,5 +38,14 @@ public class Lab1Main {
 
         System.out.println("Reduced values:");
         reduced.forEach(System.out::println);
+    }
+
+    private static String readFile(String path) {
+
+        return new BufferedReader(
+                new InputStreamReader(ClassLoader.getSystemResourceAsStream(path))
+        )
+                .lines()
+                .collect(Collectors.joining("\n"));
     }
 }
