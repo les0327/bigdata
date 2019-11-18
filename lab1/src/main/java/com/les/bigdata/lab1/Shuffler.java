@@ -1,6 +1,6 @@
 package com.les.bigdata.lab1;
 
-import com.les.bigdata.model.Pair;
+import com.les.bigdata.lab1.model.Pair;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -21,7 +21,7 @@ public class Shuffler<K extends Comparable, V> {
                 );
     }
 
-    public List<Pair<K, V>>  merge(List<Pair<K, V>> list1, List<Pair<K, V>> list2) {
+    private List<Pair<K, V>> merge(List<Pair<K, V>> list1, List<Pair<K, V>> list2) {
         List<Pair<K, V>> list = new LinkedList<>(list1);
         list.addAll(list2);
         return list;

@@ -1,10 +1,8 @@
 package com.les.bigdata.lab1;
 
-import com.les.bigdata.model.Pair;
+import com.les.bigdata.lab1.model.Pair;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,7 +12,7 @@ public class Mapper {
 
     private final String SPLIT_PATTERN = "[ \n\t]";
 
-    public List<Pair<String, Integer>> map (String string) throws IOException {
+    public List<Pair<String, Integer>> map(String string) throws IOException {
 
         String[] words = string.split(SPLIT_PATTERN);
 

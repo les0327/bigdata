@@ -1,4 +1,4 @@
-package com.les.bigdata.model;
+package com.les.bigdata.lab1.model;
 
 import java.util.Objects;
 

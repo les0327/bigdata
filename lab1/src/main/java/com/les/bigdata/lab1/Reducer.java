@@ -1,6 +1,6 @@
 package com.les.bigdata.lab1;
 
-import com.les.bigdata.model.Pair;
+import com.les.bigdata.lab1.model.Pair;
 
 import java.util.LinkedList;
 import java.util.List;

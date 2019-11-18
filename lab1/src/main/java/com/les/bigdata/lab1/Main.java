@@ -1,19 +1,16 @@
 package com.les.bigdata.lab1;
 
-import com.les.bigdata.model.Pair;
+import com.les.bigdata.lab1.model.Pair;
 
 import java.io.BufferedReader;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URI;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class Lab1Main {
+public class Main {
 
-    public void run() throws Exception {
+    public static void main(String[] args) throws Exception {
         Mapper mapper = new Mapper();
         Shuffler<String, Integer> shuffler = new Shuffler<>();
         Reducer<String, Integer> reducer = new Reducer<>();
