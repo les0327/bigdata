@@ -15,8 +15,8 @@ public class Main {
         Shuffler<String, Integer> shuffler = new Shuffler<>();
         Reducer<String, Integer> reducer = new Reducer<>();
 
-        List<Pair<String, Integer>> mappedFile1 = mapper.map(readFile("lab1/file1"));
-        List<Pair<String, Integer>> mappedFile2 = mapper.map(readFile("lab1/file2"));
+        List<Pair<String, Integer>> mappedFile1 = mapper.map(readFile("file1"));
+        List<Pair<String, Integer>> mappedFile2 = mapper.map(readFile("file2"));
 
         System.out.println("Mapped values from file1:");
         mappedFile1.forEach(System.out::println);
