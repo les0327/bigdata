@@ -16,8 +16,6 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.net.URI;
-import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 public class MaxPriceByYear {
@@ -26,24 +24,18 @@ public class MaxPriceByYear {
     private static int MAX_PRICE_INDEX = 3;
     private static int FIELDS_COUNT = 7;
 
-    private static final Text MARKET_KEY1 = new Text("EURUSD");
-    private static final Text MARKET_KEY2 = new Text("EURGBP");
+    private static final String MARKET_KEY1 = "EURUSD";
+    private static final String MARKET_KEY2 = "EURGBP";
 
     public static class MaxByYear implements Writable {
 
-        private int year;
         private double maxPrice;
 
         public MaxByYear() {
         }
 
-        public MaxByYear(int year, double maxPrice) {
-            this.year = year;
+        public MaxByYear(double maxPrice) {
             this.maxPrice = maxPrice;
-        }
-
-        public int getYear() {
-            return year;
         }
 
         public double getMaxPrice() {
@@ -52,20 +44,17 @@ public class MaxPriceByYear {
 
         @Override
         public void write(DataOutput out) throws IOException {
-            out.writeInt(year);
             out.writeDouble(maxPrice);
-
         }
 
         @Override
         public void readFields(DataInput in) throws IOException {
-            this.year = in.readInt();
-            this.maxPrice = in.readInt();
+            this.maxPrice = in.readDouble();
         }
 
         @Override
         public String toString() {
-            return "{year=" + year + ", maxPrice=" + maxPrice + "}";
+            return "{maxPrice=" + maxPrice + "}";
         }
     }
 
@@ -74,8 +63,10 @@ public class MaxPriceByYear {
         public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
             String csvLine = value.toString();
             String[] csvField = csvLine.split(",");
-            context.write(MARKET_KEY1, new MaxByYear(getYear(csvField, 0), getMaxPrice(csvField, 0)));
-            context.write(MARKET_KEY2, new MaxByYear(getYear(csvField, 1), getMaxPrice(csvField, 1)));
+            int year1 = getYear(csvField, 0);
+            context.write(new Text(MARKET_KEY1+"_"+year1), new MaxByYear(getMaxPrice(csvField, 0)));
+            int year2 = getYear(csvField, 1);
+            context.write(new Text(MARKET_KEY2+"_"+year2), new MaxByYear(getMaxPrice(csvField, 1)));
         }
 
         private int getYear(String[] csv, int pair) {
@@ -87,23 +78,14 @@ public class MaxPriceByYear {
         }
     }
 
-    public static class MaxByYearReducer extends Reducer<Text, MaxByYear, Text, MaxByYear[]> {
+    public static class MaxByYearReducer extends Reducer<Text, MaxByYear, Text, MaxByYear> {
 
         public void reduce(Text key, Iterable<MaxByYear> values, Context context) throws IOException, InterruptedException {
 
-            MaxByYear[] listMaxByYear = StreamSupport.stream(values.spliterator(), false)
-                    .collect(
-                            Collectors.toMap(
-                                    MaxByYear::getYear,
-                                    MaxByYear::getMaxPrice,
-                                    Math::max
-                            )
-                    )
-                    .entrySet().stream()
-                    .map(entry -> new MaxByYear(entry.getKey(), entry.getValue()))
-                    .toArray(MaxByYear[]::new);
-
-            context.write(key, listMaxByYear);
+            context.write(key, new MaxByYear(StreamSupport.stream(values.spliterator(), false)
+                    .mapToDouble(MaxByYear::getMaxPrice).
+                    max().
+                    getAsDouble()));
         }
 
     }
@@ -128,7 +110,7 @@ public class MaxPriceByYear {
         job.setCombinerClass(MaxByYearReducer.class);
         job.setReducerClass(MaxByYearReducer.class);
         job.setOutputKeyClass(Text.class);
-        job.setOutputValueClass(MaxByYear[].class);
+        job.setOutputValueClass(MaxByYear.class);
 
         for (int i = 1; i < otherArgs.length - 1; i++) {
             FileInputFormat.addInputPath(job, new Path(otherArgs[i]));
