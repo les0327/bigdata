@@ -1,3 +1,9 @@
-select 'EURUSD', SUBSTR(eurusd_date,0,4) as eurusd_year, max(eurusd_close) from market.forex group by SUBSTR(eurusd_date,0,4) union all select 'EURGBP', SUBSTR(eurgbp_date,0,4) as eurgbp_year, max(eurgbp_close) from market.forex group by SUBSTR(eurgbp_date,0,4);
+select 'EURUSD', SUBSTR(eurusd_date,0,4) as eurusd_year, max(eurusd_close)
+from market.forex
+group by SUBSTR(eurusd_date,0,4)
+union all
+select 'EURGBP', SUBSTR(eurgbp_date,0,4) as eurgbp_year, max(eurgbp_close)
+from market.forex
+group by SUBSTR(eurgbp_date,0,4);
 
 
